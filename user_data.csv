@@ -1,0 +1,13 @@
+first_name,last_name,username,email,password,selections
+emma,jourzac,ejourzac,emmanora@hotmail.com,1!aAAA,default
+emily,black,eblack,emily@yahoo.com,44%%ddFF,default
+dan,smith,dsmith,smithy@gmail.com,1#eEEE,default
+sarah,white,swhite,swhite@hotmail.com,5%%fFF,default
+mike,street,mstreet,mikey@gmail.com,7&&gGG,default
+dave,smith,dsmith1,dave@work.co.uk,8*hHHH,default
+dana,smith,dsmith12,dana@yoga.co.uk,1!!!sS,default
+barry,ryan,bryan,vonryan@aol.com,88**gG,"['english_name', 'sanskrit_name_adapted', 'pose_description', 'pose_benefits', 'url_svg']"
+anne,bolyn,abolyn,bolyn@queen.com,77%%aA,"['english_name', 'sanskrit_name_adapted', 'pose_description', 'pose_benefits', 'url_svg']"
+mary,magdalen,mmagdalen,mary@mary.co.uk,!!11aA,"['english_name', 'sanskrit_name_adapted', 'pose_description', 'pose_benefits', 'url_svg']"
+princess,di,pdi,di@didi.com,DDdd!1,"['english_name', 'sanskrit_name_adapted', 'pose_description', 'pose_benefits', 'url_svg']"
+amy,whitehouse,awhitehouse,amy@amy.co.uk,!!11qQ,"['english_name', 'sanskrit_name_adapted', 'pose_description', 'pose_benefits', 'url_svg']"
