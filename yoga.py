@@ -144,7 +144,8 @@ def read_csv(file):
     # if the file doesn't exist
     except (IOError, FileNotFoundError):
         # avoids runtime error and program crashing
-        pass
+        with open(file, 'w') as csv_file:
+            pass
 
 
 # a function to check if the email entered by the user registering
