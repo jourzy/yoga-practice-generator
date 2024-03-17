@@ -1,31 +1,34 @@
 # ----- importing libraries
 
-# Used pip package manager to import requests and csv library
+# All libraries for this assignment were already installed on user's machine
+# Some libraries are installed with Python package e.g. datatime
+# Other libraries require pip package manager to install e.g. requests
 # in cmd type: pip install <library> e.g. pip install requests
-# re and datetime already installed with Python
+# for Python 3 you can type: pip3 install <library> e.g. pip3 install requests
 
 # requests library used to request data from api
 import requests as rq
-# re library used to validate user input with regext
+# re library used to validate user input with regex
 import re
-# csv library used to read dictionary data from a csv file
+# csv library provides csv file handling operations to access and store user data
 import csv
 # date time library used to store the date a yoga practice is created
 # could be used in future to search yoga practices
 import datetime
+# random library used to randomly select poses for surprise me function
+import random
 # pprint makes the API data look good
 # Used for developing the program
 from pprint import pprint as pp
 
 
-# ----- helper functions for registering and login
+# ----- helper functions for registering, logging in, and file handling
+
 
 # a function to check if string input is a number and convert to integer data type
 def is_number(msg=""):
-    # loops until the user enters a valid input
     while True:
         print(msg, end="")
-        # takes user input
         selection = input()
         # checks it is a numerical character
         if selection.isnumeric():
@@ -37,7 +40,7 @@ def is_number(msg=""):
             print("Invalid selection.\n")
 
 
-# a function to ensure the user enters correct email
+# a function to ensure the user enters the correct email
 def input_email():
     verified = False
     while not verified:
@@ -124,9 +127,7 @@ def check_password():
 
 
 # a function to open and read the contents of a csv file containing dictionary data type
-# so the program can check user data that is already stored for duplicate usernames and emails
 def read_csv(file):
-    # file handling helper function
     # opens a csv file and reads in the data as a dictionary
     # uses try and except to account for if file exists or not
     try:
@@ -142,9 +143,8 @@ def read_csv(file):
 
     # if the file doesn't exist
     except (IOError, FileNotFoundError):
-        # a file is created
-        with open(file, 'w') as csv_file:
-            pass
+        # avoids runtime error and program crashing
+        pass
 
 
 # a function to check if the email entered by the user registering
@@ -187,7 +187,6 @@ def username_unique(username, data):
 
 # a function that writes the new user data back to the csv file
 def write_csv(file, data):
-    # file handling helper function
     # opens a csv file and saves the data in dictionary format
     with open(file, 'w') as csv_file:
         spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names,
@@ -198,7 +197,6 @@ def write_csv(file, data):
 
 # a function to execute the file handling operations to add a new user to the user_data.csv file
 def add_user(file, add_data):
-    # adds the new user data to a csv file
     data = read_csv(file)
     data.append(add_data)
     write_csv(file, data)
@@ -222,15 +220,11 @@ def login():
     # function loops until login is successful
     while True:
         username = input("\nEnter username: ")
-        # converts to lowercase
         username = username.lower()
         password = input("Enter password: ")
-        # reads in user data from csv file
         data = read_csv(f_name)
         success = False
-        # if data exists
         if data:
-            # for each user's data
             for user in data:
                 # if the username and password match the input from the current user
                 if user["username"] == username and user["password"] == password:
@@ -254,9 +248,7 @@ def register():
     email = check_email()
     # password helper functions are called
     password = check_password()
-    # reads in user data
     data = read_csv(f_name)
-    # if user data exists
     if data:
         # helper function checks to see if email exists and returns boolean
         if email_exists(email, data):
@@ -264,7 +256,7 @@ def register():
             print("\nAn account already exists with this email."
                   "\nPlease login with the stored username and password."
                   "\nPress any key to continue.")
-            # and sent back to welcome screen whee they can choose login
+            # and sent back to welcome screen where they can choose login
             # in future iterations they should have the option to have their login details emailed to them
             # or to reset their password
             welcome()
@@ -281,7 +273,6 @@ def register():
                 'selections': ["english_name", "sanskrit_name_adapted", "pose_description", "pose_benefits", "url_svg"]}
     # this dictionary is then added to the CSV file holding user data
     add_user(f_name, new_user)
-    # message lets user know the registration is successful and to note their username
     print("\nCongratulations, you have successfully registered with Yoga Club!"
           f"\nPlease make a note of your username: {username}, and your password.")
 
@@ -289,7 +280,6 @@ def register():
 # main menu for the program
 def yoga_generator():
     print("\n>>>\tYoga Practice Generator\t<<<\n"
-          # explains what users can do in the app
           "\nUse this app to create your own personalised yoga practice.\n"
           "You can search for poses by category, or by their English name.\n"
           "Alternatively, you can select 'surprise me' for a complete surprise!\n")
@@ -298,29 +288,27 @@ def yoga_generator():
            "3: Surprise me\n"
            "0: Quit\n\n"
            "Enter a number to proceed: ")
-    finish = False
-    while finish == False:
+    while True:
         selection = is_number(msg)
         if selection == 0:
             print("You have chosen to quit the program")
             print("Goodbye")
-            finish = True
+            quit()
         elif selection == 1:
             yoga_categories()
         elif selection == 2:
-            pass
+            search_poses()
         elif selection == 3:
-            pass
+            surprise_me()
         else:
             print("\nPlease enter a valid number.\n")
-    return True
-
 
 
 # a function to display all the yoga categories to help users search for poses
 def yoga_categories():
     print("\n>>>\tYoga categories\t<<<\n")
-    # loops through the categories from the api
+    cat_length = len(categories)
+    # loops through the yoga categories from the api
     for i in range(cat_length):
         # displays a list of categories with associated numbers
         print(f"{i + 1}: {categories[i]["category_name"]}")
@@ -346,7 +334,6 @@ def yoga_categories():
 def poses_by_cat(selection):
     # gets real index for category
     i = selection - 1
-    # displays heading to show user which category of poses they are viewing
     print(f"\n>>>\t{categories[i]["category_name"]} Poses\t<<<\n")
     # find number of poses associated with this category
     no_of_poses = len(categories[i]["poses"])
@@ -376,6 +363,73 @@ def poses_by_cat(selection):
     yoga_categories()
 
 
+# a function that allows a user to search for poses by name
+def search_poses():
+    name = input("Enter (all or part of) the name of the "
+                 "pose you want to add to your yoga practice: \n")
+    name = name.lower()
+    results = []
+    for cat in categories:
+        poses = cat["poses"]
+        for each in poses:
+            lowercase = each["english_name"].lower()
+            if name in lowercase:
+                to_add = [each["english_name"], each["category_name"]]
+                duplicate = False
+                for result in results:
+                    if result[0] == to_add[0]:
+                        duplicate = True
+                        break
+                if not duplicate:
+                    results.append(to_add)
+    if not results:
+        print("\nThere were no matches. Please try again.\n")
+        search_poses()
+    else:
+        for i in range(len(results)):
+            print(f"{i+1}: {results[i][0]}")
+        print("\n0: Back to main menu\n\n"
+              "Select a pose to add to your yoga practice: ", end="")
+        while True:
+            selection = is_number()
+            if selection == 0:
+                break
+            # if user selects a number associated with a pose
+            elif 1 <= selection <= len(results):
+                # gets real index value for this pose
+                index = selection - 1
+                # stores name of yoga pose
+                pose = results[index][0]
+                # stores name of yoga category
+                category = results[index][1]
+                # passes values as arguments to function where user can confirm their choice
+                confirm_selection(category, pose)
+            else:
+                print("\nPlease enter a valid number: ", end="")
+        yoga_generator()
+
+
+# a function that allows the user to get random poses
+def surprise_me():
+    msg = "\nHow many poses do you want in your yoga practice?: "
+    while True:
+        number = is_number(msg)
+        if number not in range(1, 21):
+            msg = "\nYou can add between 1 and 20 poses. Please enter a number in that range: "
+        else:
+            break
+    for i in range(number):
+        cat_length = len(categories)
+        random_cat = random.randint(0, cat_length-1)
+        category = categories[random_cat]["category_name"]
+        pose_length = len(categories[random_cat]["poses"])
+        random_pose = random.randint(0, pose_length-1)
+        pose = categories[random_cat]["poses"][random_pose]["english_name"]
+        add_pose(category, pose)
+    print("\nYour yoga practice has successfully been updated.\n"
+          f"You can see your yoga practice in the text file.\n")
+
+
 # a function where user can confirm the yoga pose to add to their yoga practice or cancel it
 def confirm_selection(category, pose):
     print(f"\n>>>\tConfirm Selection\t<<<\n")
@@ -387,36 +441,45 @@ def confirm_selection(category, pose):
     while True:
         selection = is_number()
         if selection == 0:
-           break
+            break
         elif selection == 1:
             # if they choose to confirm, this function is called to add the pose to the txt file
             add_pose(category, pose)
+            print("\nYour yoga practice has successfully been updated.\n"
+                  f"You can see your yoga practice in the text file.\n")
             break
         else:
             print("\nPlease enter a valid number: ", end="")
-    yoga_categories()
+    yoga_generator()
 
+
+# a function to add the selected yoga pose to the users current yoga practice text file
 def add_pose(category, pose):
+    # loops through api data
     for cat in categories:
         if cat["category_name"] == category:
             poses = cat["poses"]
             for each in poses:
                 if each["english_name"] == pose:
+                    # stores the pose
                     item_to_add = each
                     break
+    # creates a file name
     file_name = current_user + ".txt"
+    # adds a selection of key value pairs for the yoga pose
     to_add = f"Pose: {item_to_add['english_name']}"
     to_add += f"\nSanskrit name: {item_to_add['sanskrit_name_adapted']}"
     to_add += f"\nCategory: {item_to_add['category_name']}"
     to_add += f"\nDescription: {item_to_add['pose_description']}"
     to_add += f"\nImage link: {item_to_add['url_png']}\n\n"
+    # if the file already exists, the data is read and new data added then written back to the file
     try:
         with open(file_name, 'r') as txt_file:
             text = txt_file.read()
             text += to_add
         with open(file_name, 'w') as txt_file:
             txt_file.write(text)
-    # if the file doesn't exist.....
+    # if the file doesn't exist, the new data is written to the file
     except (IOError, FileNotFoundError):
         with open(file_name, 'w') as txt_file:
             today = datetime.datetime.now()
@@ -424,45 +487,47 @@ def add_pose(category, pose):
             text = f"Username: {current_user}\nDate: {date_short}\n\n\t\t\t>>> Yoga Practice <<< \n\n"
             text += to_add
             txt_file.write(text)
-    print("\nThe pose has successfully been added to the Yoga Practice\n"
-          f"See {file_name} to view your yoga practice.\n")
 
 
 # ----- importing yoga API
 
+
 # importing yoga categories using API
 
 # THIS API DOES NOT REQUIRE A KEY!
+# api end data point
 url = 'https://yoga-api-nzy4.onrender.com/v1/categories'
-categories = rq.get(url).json()  # two steps, request and convert, result is list
+# using requests library to request data from end point
+categories = rq.get(url)
+# http status code 200 indicates request was successful
+print(f"Status code: {categories.status_code}")
+# data is converted using json method, result is list
+categories = categories.json()
 # pp(categories)
-
-# counts up the number of categories
-cat_length = len(categories)
 
 # for csvs
 f_name = "user_data.csv"
 field_names = ['first_name', 'last_name', 'username', 'email', 'password', 'selections']
 
+
 # ----- main program
 
-end_program = False
-while not end_program:
-    logged_in = False
-    while not logged_in:
-        option = welcome()
-        if option == 1:
-            current_user = login()
-            logged_in = True
-        elif option == 2:
-            register()
-        else:
-            print("\nPlease enter a valid number.\n")
-    end_program = yoga_generator()
-print("Goodbye!")
+
+logged_in = False
+while not logged_in:
+    option = welcome()
+    if option == 1:
+        current_user = login()
+        logged_in = True
+    elif option == 2:
+        register()
+    else:
+        print("\nPlease enter a valid number.\n")
+yoga_generator()
+
 
 # I planned for more functionality but ran out of time
-# Unused code is commented out below
+# Unused code is commented out below but keeping for future development.
 
 # def settings():
 #     print("\n>>>\tSettings\t<<<\n")
