@@ -32,10 +32,8 @@ def is_number(msg=""):
         selection = input()
         # checks it is a numerical character
         if selection.isnumeric():
-            # if it is, converts to integer
             selection = int(selection)
             return selection
-        # otherwise, prompts user to make a valid selection
         else:
             print("Invalid selection.\n")
 
@@ -46,11 +44,8 @@ def input_email():
     while not verified:
         email = input("Email: ")
         email_verify = input("Please re-enter your email: ")
-        # if both emails match
         if email == email_verify:
-            # break the loop
             verified = True
-        # otherwise prompts user to enter matching emails
         else:
             print("The emails did not match, please try again...")
     return email
@@ -62,7 +57,6 @@ def validate_email(email):
     regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
     # checks if email matches regex rule
     if re.fullmatch(regex, email):
-        # returns boolean value
         return True
     else:
         return False
@@ -88,11 +82,8 @@ def input_password():
                          ", special character (@$!%*#?&) and be between 6-20 characters.\n"
                          "Please enter your password: ")
         password_verify = input("Please re-enter your password: ")
-        # if both passwords entered match
         if password == password_verify:
-            # loop is broken
             verified = True
-        # otherwise user is prompted to enter matching passwords
         else:
             print("The passwords did not match, please try again...")
     return password
@@ -106,10 +97,8 @@ def validate_password(password):
     regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$")
     # if the password meets the regex criteria
     if re.search(regex, password):
-        # returns boolean value
         return True
     else:
-        # user prompted to enter valid password
         print("password not valid")
         return False
 
@@ -122,7 +111,6 @@ def check_password():
         if validate_password(password):
             return password
         else:
-            # user prompted if input invalid
             print("Your password does not meet the required conditions for a valid password:\n")
 
 
@@ -134,16 +122,14 @@ def read_csv(file):
         with open(file, 'r') as csv_file:
             # reads in the dictionary data
             spreadsheet = csv.DictReader(csv_file)
-            # creates empty array
             data = []
-            # adds each row of data in the spreadsheet to the array
             for row in spreadsheet:
                 data.append(row)
         return data
 
     # if the file doesn't exist
     except (IOError, FileNotFoundError):
-        # avoids runtime error and program crashing
+        # avoids runtime error
         with open(file, 'w') as csv_file:
             pass
 
@@ -340,9 +326,8 @@ def poses_by_cat(selection):
     no_of_poses = len(categories[i]["poses"])
     # loops through each pose
     for j in range(no_of_poses):
-        # displays pose number and pose english name
+        # displays pose number and pose name
         print(f"{j + 1}: {categories[i]["poses"][j]["english_name"]}")
-    # user can also return to main menu
     print("\n0: Back to main menu\n\n"
           "Enter a number: ", end="")
     while True:
@@ -370,6 +355,7 @@ def search_poses():
                  "pose you want to add to your yoga practice: \n")
     name = name.lower()
     results = []
+    # looping through the poses in each category
     for cat in categories:
         poses = cat["poses"]
         for each in poses:
@@ -377,6 +363,7 @@ def search_poses():
             if name in lowercase:
                 to_add = [each["english_name"], each["category_name"]]
                 duplicate = False
+                # checking for duplicates
                 for result in results:
                     if result[0] == to_add[0]:
                         duplicate = True
@@ -387,6 +374,7 @@ def search_poses():
         print("\nThere were no matches. Please try again.\n")
         search_poses()
     else:
+        # display the poses that contain search term
         for i in range(len(results)):
             print(f"{i+1}: {results[i][0]}")
         print("\n0: Back to main menu\n\n"
@@ -433,11 +421,20 @@ def surprise_me():
 
 # a function where user can confirm the yoga pose to add to their yoga practice or cancel it
 def confirm_selection(category, pose):
-    print(f"\n>>>\tConfirm Selection\t<<<\n")
-    print(f"You have chosen to add {pose}"
-          " to your current yoga practice.\n\n"
-          "1: Confirm selection\n"
-          "0: Cancel selection and return to Yoga Categories\n\n"
+    for cat in categories:
+        poses = cat["poses"]
+        for each in poses:
+            if each["english_name"] == pose:
+                description = each["pose_description"]
+                break
+    print(f"\n>>>\t{pose}\t<<<\n")
+    description_list = description.split("  ")
+    for sentence in description_list:
+        print(sentence)
+    print(f"\nYou have chosen to add {pose}"
+          " to your current yoga practice.\n"
+          "\n1: Confirm selection\n"
+          "0: Cancel selection\n\n"
           "Enter a number to proceed: ", end="")
     while True:
         selection = is_number()
