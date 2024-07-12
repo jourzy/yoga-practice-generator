@@ -21,12 +21,10 @@ from pprint import pprint as pp
 # ----- importing functions
 
 from login import is_number, check_email, check_password
-from file_handling import read_csv, email_exists, username_unique, add_user
+from file_handling import read_csv, email_exists, username_unique, add_user, f_name
 
 
-# for csvs
-f_name = "user_data.csv"
-field_names = ['first_name', 'last_name', 'username', 'email', 'password', 'selections']
+
 
 
 # ----- functions for the main part of the program

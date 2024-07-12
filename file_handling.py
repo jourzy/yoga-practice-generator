@@ -3,7 +3,9 @@
 # csv library provides csv file handling operations to access and store user data
 import csv
 
-
+# for csvs
+f_name = "user_data.csv"
+field_names = ['first_name', 'last_name', 'username', 'email', 'password', 'selections']
 
 # ----- helper functions for file handling
 

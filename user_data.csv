@@ -1,5 +1,5 @@
 first_name,last_name,username,email,password,selections
-emma,jourzac,ejourzac,emmanora@hotmail.com,1!aAAA,default
+emma,jourzac,ejourzac,emma@hotmail.com,1!!Eee,"['english_name', 'sanskrit_name_adapted', 'pose_description', 'pose_benefits', 'url_svg']"
 emily,black,eblack,emily@yahoo.com,44%%ddFF,default
 dan,smith,dsmith,smithy@gmail.com,1#eEEE,default
 sarah,white,swhite,swhite@hotmail.com,5%%fFF,default
